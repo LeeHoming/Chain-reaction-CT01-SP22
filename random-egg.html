@@ -112,8 +112,13 @@
             nameContainer.innerText = tag
             musicSection.appendChild(nameContainer)
         }
+
         //put picture from Art Museum in picture section
         function backgroundPicture(image) {
+            while (pictureSection.firstChild) {
+                pictureSection.removeChild(pictureSection.firstChild)
+            }
+
             let thumbContainer = document.createElement('img')
             thumbContainer.src = image
             thumbContainer.alt = name
