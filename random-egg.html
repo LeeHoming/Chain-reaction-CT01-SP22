@@ -11,13 +11,141 @@
             max-width: 300px;
         }
     </style>
+
+    <!-- 搜索框 -->
+    <link href="http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: #589696;
+            font-weight: 500;
+            font-family: "Microsoft YaHei", "Segoe UI", "Lucida Grande", Helvetica, Arial, sans-serif, FreeSans, Arimo;
+        }
+        
+        #container {
+            width: 500px;
+            height: 820px;
+            margin: 0 auto;
+        }
+        
+        div.search {
+            padding: 30px 0;
+        }
+        
+        form {
+            position: relative;
+            width: 300px;
+            margin: 0 auto;
+        }
+        
+        input,
+        button {
+            border: none;
+            outline: none;
+        }
+        
+        input {
+            width: 100%;
+            height: 42px;
+            padding-left: 13px;
+        }
+        
+        button {
+            height: 42px;
+            width: 42px;
+            cursor: pointer;
+            position: absolute;
+        }
+        
+        .bar1 {
+            background: #A3D0C3;
+        }
+        
+        .bar1 input {
+            border: 2px solid #7BA7AB;
+            border-radius: 5px;
+            background: #F9F0DA;
+            color: #9E9C9C;
+        }
+        
+        .bar1 button {
+            top: 0;
+            right: 0;
+            background: #7BA7AB;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .bar1 button:before {
+            content: "\1F423";
+            font-family: FontAwesome;
+            font-size: 25px;
+            color: #F9F0DA;
+        }
+    </style>
+
+    <style type="text/css">
+        .aa {
+            position: absolute;
+            z-index: 2;
+            left: 50%;
+            top: 20%;
+        }
+        
+        .bb {
+            position: absolute;
+            z-index: 1;
+            left: 50%;
+            top: 20%;
+        }
+    </style>
 </head>
 
 <body>
-    <button id="startTheProcess"><img src="Chick-icon.png"></button>
-    <section id="cocktailSection"></section>
+    <div class="Introduction">
+        <h1 class="display-3">Magic Egg</h1>
+        <p class="lead">Click the chicken to generate a egg base on a random word</p>
+    </div>
+
+    <div id="contain">
+        <div class="search bar1">
+            <form>
+                <input type="text" placeholder="A word?">
+                <button type="submit"></button>
+            </form>
+        </div>
+    </div>
+
+    <div class="aa">
+        <img src="Egg Frame2.png" width="600px">
+    </div>
+
+    <div class="bb">
+        <img src="test frame.png" height="300px">
+    </div>
+    <!-- <div class="container">
+        <div class="input-group word-input-xlg">
+            <input type="text" id="term" class="form-control" placeholder="">
+            <span class="input-group-btn">
+    		<button id="reset" class="btn btn-secondary" type="button"><img src="Chick-icon.png" width="25" height="25"></button>
+      	</span>
+        </div>
+    </div> -->
+
+
+    <!-- <button id="startTheProcess"><img src="Chick-icon.png"></button> -->
+    <!-- <section id="cocktailSection"></section> -->
     <section id="pictureSection"></section>
     <section id="musicSection"></section>
+
+
+
+
 
     <script>
         //Section
@@ -40,7 +168,7 @@
         let cocktailUrl = "https://www.thecocktaildb.com/api/json/v1/1/random.php"
 
         //lisence to button
-        let triggerButton = document.getElementById("startTheProcess")
+        let triggerButton = document.getElementById("reset")
 
         //fuction
         let triggerHandler = function() {
@@ -94,15 +222,16 @@
         }
 
         let cockTailDataHandler = function(cocktailData) {
-                let name = cocktailData.drinks[0].strDrink
-                let Thumb = cocktailData.drinks[0].strDrinkThumb
+            let name = cocktailData.drinks[0].strDrink
+            let Thumb = cocktailData.drinks[0].strDrinkThumb
 
-                //console.info(name)
-                let nameContainer = document.createElement('h3')
-                nameContainer.innerText = name
-                cocktailSection.appendChild(nameContainer)
-            }
-            //put description of music on the section
+            //console.info(name)
+            let nameContainer = document.createElement('h3')
+            nameContainer.innerText = name
+            cocktailSection.appendChild(nameContainer)
+        }
+
+        //put description of music on the section
         function musicHundler(musicData, tag) {
             while (musicSection.firstChild) {
                 musicSection.removeChild(musicSection.firstChild)
