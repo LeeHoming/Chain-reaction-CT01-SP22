@@ -13,8 +13,6 @@
     </style>
 
     <!-- 搜索框 -->
-    <link href="http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
     <style>
         * {
             box-sizing: border-box;
@@ -112,14 +110,14 @@
         <p class="lead">Click the chicken to generate a egg base on a random word</p>
     </div>
 
-    <div id="contain">
+    <!-- <div id="contain">
         <div class="search bar1">
             <form>
                 <input type="text" placeholder="A word?">
                 <button type="submit"></button>
             </form>
         </div>
-    </div>
+    </div> -->
 
     <div class="aa">
         <img src="Egg Frame2.png" width="600px">
@@ -128,6 +126,7 @@
     <div class="bb">
         <img src="test frame.png" height="300px">
     </div>
+
     <!-- <div class="container">
         <div class="input-group word-input-xlg">
             <input type="text" id="term" class="form-control" placeholder="">
@@ -138,8 +137,8 @@
     </div> -->
 
 
-    <!-- <button id="startTheProcess"><img src="Chick-icon.png"></button> -->
-    <!-- <section id="cocktailSection"></section> -->
+    <button id="startTheProcess"><img src="Chick-icon.png"></button>
+
     <section id="pictureSection"></section>
     <section id="musicSection"></section>
 
@@ -152,6 +151,8 @@
         let cocktailSection = document.getElementById("cocktailSection")
         let musicSection = document.getElementById("musicSection")
         let pictureSection = document.getElementById("pictureSection")
+
+        let keyword
 
         //freesoundApi
         let freesoundURL = "https://freesound.org/apiv2/search/text/?"
@@ -168,7 +169,7 @@
         let cocktailUrl = "https://www.thecocktaildb.com/api/json/v1/1/random.php"
 
         //lisence to button
-        let triggerButton = document.getElementById("reset")
+        let triggerButton = document.getElementById("startTheProcess")
 
         //fuction
         let triggerHandler = function() {
@@ -185,12 +186,12 @@
                 console.info(data)
 
                 //translate json to string
-                let keyword = data.toString()
+                keyword = data.toString()
 
                 //print string in container
                 let nameContainer = document.createElement('h3')
                 nameContainer.innerText = name
-                cocktailSection.appendChild(nameContainer)
+                    //cocktailSection.appendChild(nameContainer)
 
                 console.info(keyword)
                 searchKeywordInMuseum(keyword)
