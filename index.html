@@ -12,6 +12,7 @@
         }
     </style>
 
+
     <!-- 搜索框 -->
     <style>
         * {
@@ -21,7 +22,7 @@
         body {
             margin: 0;
             padding: 0;
-            background: #589696;
+            background: #000000;
             font-weight: 500;
             font-family: "Microsoft YaHei", "Segoe UI", "Lucida Grande", Helvetica, Arial, sans-serif, FreeSans, Arimo;
         }
@@ -88,26 +89,67 @@
     </style>
 
     <style type="text/css">
-        .aa {
+        .OutLine {
             position: absolute;
-            z-index: 2;
-            left: 50%;
-            top: 20%;
+            z-index: 3;
+            left: 100px;
+            top: 200px;
         }
         
-        .bb {
+        .BackImage {
             position: absolute;
             z-index: 1;
-            left: 50%;
-            top: 20%;
+            left: 100px;
+            top: 205px;
+        }
+        
+        .WordTitle {
+            position: absolute;
+            text-align: center;
+            z-index: 5;
+            left: 145px;
+            top: 420px;
+            color: #7d2b2b;
+            font-size: 35px;
         }
     </style>
+
+    <style type="text/css">
+        .WordHeightLight {
+            position: absolute;
+            z-index: 2;
+            left: 100px;
+            top: 205px;
+            width: 230px;
+            height: 300px;
+            color: #f2f2f2;
+            text-shadow: #181714;
+            /* background: #ff9900; */
+            font-size: 25px;
+        }
+        
+        .h1-display {
+            color: rgb(255, 255, 255);
+        }
+        
+        .p-display {
+            color: rgb(236, 236, 236);
+        }
+        
+        .ChickButton {
+            background-color: #000000;
+            width: 20px;
+            size: 10px;
+        }
+    </style>
+
 </head>
 
 <body>
     <div class="Introduction">
-        <h1 class="display-3">Magic Egg</h1>
-        <p class="lead">Click the chicken to generate a egg base on a random word</p>
+        <h1 class="h1-display">Magic Egg</h1>
+        <p class="p-display">Click the chicken to generate a egg base on a random word<button id="startTheProcess" class="ChickButton"><img src="1wsyeu814twez3.png" alt="" width="40px"></button></p>
+
     </div>
 
     <!-- <div id="contain">
@@ -119,13 +161,15 @@
         </div>
     </div> -->
 
-    <div class="aa">
-        <img src="Egg Frame2.png" width="600px">
+    <div class="OutLine">
+        <img src="Egg Frame3.png" width="600px">
     </div>
+    <!-- <div class="WordTitle">
 
-    <div class="bb">
+    </div> -->
+    <!-- <div class="BackImage">
         <img src="test frame.png" height="300px">
-    </div>
+    </div> -->
 
     <!-- <div class="container">
         <div class="input-group word-input-xlg">
@@ -137,20 +181,29 @@
     </div> -->
 
 
-    <button id="startTheProcess"><img src="Chick-icon.png"></button>
-
-    <section id="pictureSection"></section>
-    <section id="musicSection"></section>
 
 
+    <section id="pictureSection" class="BackImage"></section>
+    <section id="musicSection" class="WordHeightLight"></section>
+    <section id="TitleSection" class="WordTitle"></section>
 
 
+    <!-- <div class="container">
+        <div class="input-group magic-input-xlg">
+            <input type="text" id="term" class="form-control" placeholder="">
+            <span class="input-group-btn">
+    		<button id="reset" class="btn btn-secondary" type="button">Start Over</button>
+      	</span>
+        </div>
+        <div id="message-panel"></div>
+    </div> -->
 
     <script>
         //Section
         let cocktailSection = document.getElementById("cocktailSection")
         let musicSection = document.getElementById("musicSection")
         let pictureSection = document.getElementById("pictureSection")
+        let TitleSection = document.getElementById("TitleSection")
 
         let keyword
 
@@ -165,6 +218,9 @@
 
         let HarvardMuseumUrl = "https://api.harvardartmuseums.org"
         let HarvardApiKey = "3bf5e50a-ff1c-477d-b180-9c1d5247a748"
+
+        let wordRequest = "http://iiif-explorer.herokuapp.com/data/terms/"
+        let wordImageRequest = ""
 
         let cocktailUrl = "https://www.thecocktaildb.com/api/json/v1/1/random.php"
 
@@ -196,6 +252,15 @@
                 console.info(keyword)
                 searchKeywordInMuseum(keyword)
                 fetchMusic(keyword)
+
+                //change title
+                while (TitleSection.firstChild) {
+                    TitleSection.removeChild(TitleSection.firstChild)
+                }
+
+                let TitleName = document.createElement('h3')
+                TitleName.innerText = keyword
+                TitleSection.appendChild(TitleName)
 
             })
         }
@@ -238,8 +303,10 @@
                 musicSection.removeChild(musicSection.firstChild)
             }
 
+            var str = tag.toString();
+            //str.replace(/,/g, " ");
             let nameContainer = document.createElement('h3')
-            nameContainer.innerText = tag
+            nameContainer.innerText = str.replace(/,/g, " ")
             musicSection.appendChild(nameContainer)
         }
 
@@ -270,6 +337,133 @@
 
 
         triggerButton.addEventListener('click', triggerHandler)
+
+        //Messages container
+        var messages = [];
+
+        //Clean Messages
+        function clearMessages() {
+            $(".full-image").remove();
+
+            messages = [];
+            $("#message-panel").empty();
+            $("#term").val("").focus();
+        }
+
+        //Process Phrase
+        function processPhrase() {
+            var message = $("#term").val();
+            //源代码通过空格分隔
+            var terms = message.trim().split(" ");
+            messages.push(message);
+
+            var m = $("<div/>")
+                .attr("id", "message")
+                .attr("data-message-number", messages.length);
+            $("#message-panel").append(m);
+
+            for (var i = 0; i < terms.length; i++) {
+                if (term[i] != "") {
+                    var img = $("<img/>")
+                        .attr("class", "draggable message-word")
+                        .attr("alt", terms[i])
+                        .attr("id", "position-" + i)
+                        .dblclick(showFullImage);
+                    $(m).append(img);
+
+                    fetchTermImages(terms[i], img);
+                }
+            }
+        }
+
+        function fetchTermImages(term, messageContainer) {
+            $.get("/data/terms/" + term, function(data) {
+                var randomImage = data[Math.floor(Math.random() * data.length)];
+
+                fragmentCoords = randomImage.selectors[0].value.replace("xywh=", "");
+                iiifImageFragment = randomImage.target.replace("full/full", fragmentCoords + "/full");
+
+                vertices = fragmentCoords.split(",");
+                randomImage.vertices = {};
+                randomImage.vertices.x = vertices[0];
+                randomImage.vertices.y = vertices[1];
+
+                $(messageContainer)
+                    .data("info", randomImage)
+                    .attr("src", iiifImageFragment);
+            });
+        }
+
+        function showFullImage() {
+            var pos = $(this).offset();
+            var data = $(this).data("info");
+            var imageURL = data.target;
+
+            var x = pos.left - (data.vertices.x);
+            var y = pos.top - (data.vertices.y);
+
+            var container = $("<div/>")
+                .css({
+                    "z-index": 100000,
+                    "position": "absolute",
+                    "top": y + "px",
+                    "left": x + "px"
+                })
+                .attr("class", "draggable full-image")
+                .dblclick(function() {
+                    $(this).remove();
+                });
+
+            // Add the image
+            var fullImage = $("<img/>", {
+                "src": imageURL
+            })
+            $(container).append(fullImage);
+
+            // Add the info panel		
+            var infoPanel = $("<div/>")
+                .attr("class", "info-panel");
+
+            $.get("/data/image/" + data.imageid + "/objects", function(data) {
+                var description = "It's a " + data[0].worktypes[0].worktype + " titled " + data[0].title + ".<br/>";
+                var link = $("<a/>")
+                    .attr("href", data[0].url)
+                    .attr("target", "_blank")
+                    .html("Read more about it.");
+
+                $(infoPanel).append(description)
+                    .append(link);
+
+                $(container).append(infoPanel);
+
+                interact('.draggable').draggable({
+                    onmove: dragMoveListener
+                });
+
+                $("body").append(container);
+            });
+        }
+
+        $(function() {
+            $("#go").click(processPhrase);
+            $("#reset").click(clearMessages);
+
+            $("#term").keypress(function(event) {
+                if (event.which == 13 || event.which == 32) {
+                    processPhrase()
+                } else if (event.which == 48) {
+                    clearMessages();
+                }
+            });
+
+            $("#term").keyup(function(event) {
+                if ($("#term").val() === "") {
+                    clearMessages();
+                }
+            });
+
+            $("#term").focus();
+        });
     </script>
 </body>
 
